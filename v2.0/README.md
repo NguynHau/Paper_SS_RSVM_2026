@@ -55,7 +55,6 @@ v2.0/
     ├── auc_difference.pdf
     └── f1_difference.pdf
         └── Figures generated from the Version 2.0 results.
-
 ---
 
 # 1. Method
