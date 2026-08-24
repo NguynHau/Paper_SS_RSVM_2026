@@ -8,15 +8,22 @@ The repository is designed to facilitate reproducibility of the reported experim
 
 ## Repository Structure
 
-Paper_SS-RSVM/
-|
-|-- Paper_SS-RSVM_final.ipynb
-|   `-- Final notebook containing the R-SVM implementation,
-|       dynamic safe screening method, experiments,
-|       statistical analyses, and visualization.
+v2.0/
 |
 |-- README.md
-|   `-- Documentation and reproduction instructions.
+|   `-- Documentation and reproduction instructions for the
+|       revised version of the study.
+|
+|-- code/
+|   |
+|   `-- Paper_SS-RSVM_final.ipynb
+|       `-- Final notebook containing the R-SVM implementation,
+|           dynamic safe screening method, experiments,
+|           statistical analyses, and visualization.
+|
+|-- paper/
+|   `-- Revised manuscript
+|       `-- Source files of the revised version of the paper.
 |
 |-- requirements.txt
 |   `-- Python dependencies required to run the notebook.
@@ -32,7 +39,9 @@ Paper_SS-RSVM/
 |   |       datasets, solvers, parameters, methods, and seeds.
 |   |
 |   |-- fastness_results.csv
-|   |   `-- Aggregated computational-efficiency results.
+|   |   `-- Aggregated computational-efficiency results,
+|       including training time, screening overhead,
+|       screening rate, speedup, and statistical tests.
 |   |
 |   |-- objective_accuracy_results.csv
 |   |   `-- Objective-value and predictive-performance
@@ -44,11 +53,23 @@ Paper_SS-RSVM/
 `-- figures/
     |
     |-- performance_analysis.pdf
+    |   `-- Computational performance and screening-rate analysis.
+    |
     |-- objective_difference.pdf
+    |   `-- Relative objective-value differences between
+    |       baseline and screened R-SVM.
+    |
     |-- accuracy_difference.pdf
+    |   `-- Accuracy differences between baseline and
+    |       screened R-SVM.
+    |
     |-- auc_difference.pdf
+    |   `-- AUC differences between baseline and
+    |       screened R-SVM.
+    |
     `-- f1_difference.pdf
-        `-- Figures generated from the experimental results.
+        `-- F1-score differences between baseline and
+            screened R-SVM.
 
 ---
 
