@@ -1,0 +1,10 @@
+numpy
+pandas
+scipy
+scikit-learn
+cvxpy
+matplotlib
+seaborn
+requests
+urllib3
+google-api-python-client

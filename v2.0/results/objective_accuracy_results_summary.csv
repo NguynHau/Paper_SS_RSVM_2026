@@ -1,0 +1,5 @@
+Metric,Total groups,Equivalent (p < 0.05),Not equivalent (p >= 0.05),Equivalent rate (%)
+Objective,72,72,0,100.0
+Accuracy,72,72,0,100.0
+AUC,72,72,0,100.0
+F1,72,72,0,100.0
