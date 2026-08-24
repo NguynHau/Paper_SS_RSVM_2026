@@ -1,167 +1,75 @@
-# Dynamic Safe Screening for Robust Support Vector Machines
+# Dynamic Safe Screening for Robust Support Vector Machines — Version 2.0
 
-This repository contains the implementation, experimental results, statistical analyses, and figures for the paper on Dynamic Safe Screening for Robust Support Vector Machines (R-SVM).
+This directory contains the revised implementation, experimental results,
+statistical analyses, and figures associated with Version 2.0 of the paper
+on Dynamic Safe Screening for Robust Support Vector Machines (R-SVM).
 
-The repository is designed to facilitate reproducibility of the reported experiments. The complete experimental results are provided in the `results/` directory, allowing the reported analyses and figures to be reproduced without rerunning the full optimization benchmark.
+Version 2.0 contains the updated code and results corresponding to the
+revised experimental study. It is organized separately from Version 1.0,
+which preserves the previous implementation and experimental results.
+
+The supplied experimental result files allow the reported analyses and
+figures to be reproduced without rerunning the complete optimization
+benchmark.
 
 ---
 
-## Repository Structure
+## Version 2.0 Structure
 
 v2.0/
-|
-|-- README.md
-|   `-- Documentation and reproduction instructions for the
-|       revised version of the study.
-|
-|-- code/
-|   |
-|   `-- Paper_SS-RSVM_final.ipynb
-|       `-- Final notebook containing the R-SVM implementation,
-|           dynamic safe screening method, experiments,
-|           statistical analyses, and visualization.
-|
-|-- paper/
-|   `-- Revised manuscript
-|       `-- Source files of the revised version of the paper.
-|
-|-- requirements.txt
-|   `-- Python dependencies required to run the notebook.
-|
-|-- data/
-|   `-- Dataset-related files used by the experiments,
-|       when applicable.
-|
-|-- results/
-|   |
-|   |-- master_results.csv
-|   |   `-- Complete experimental results across all
-|   |       datasets, solvers, parameters, methods, and seeds.
-|   |
-|   |-- fastness_results.csv
-|   |   `-- Aggregated computational-efficiency results,
-|       including training time, screening overhead,
-|       screening rate, speedup, and statistical tests.
-|   |
-|   |-- objective_accuracy_results.csv
-|   |   `-- Objective-value and predictive-performance
-|   |       comparisons between baseline and screened R-SVM.
-|   |
-|   `-- objective_accuracy_results_summary.csv
-|       `-- Summary of the statistical equivalence analysis.
-|
-`-- figures/
-    |
-    |-- performance_analysis.pdf
-    |   `-- Computational performance and screening-rate analysis.
-    |
-    |-- objective_difference.pdf
-    |   `-- Relative objective-value differences between
-    |       baseline and screened R-SVM.
-    |
-    |-- accuracy_difference.pdf
-    |   `-- Accuracy differences between baseline and
-    |       screened R-SVM.
-    |
-    |-- auc_difference.pdf
-    |   `-- AUC differences between baseline and
-    |       screened R-SVM.
-    |
-    `-- f1_difference.pdf
-        `-- F1-score differences between baseline and
-            screened R-SVM.
+├── README.md
+│   └── Documentation and reproduction instructions for Version 2.0.
+│
+├── code/
+│   └── Paper_SS-RSVM_final.ipynb
+│       └── Final notebook containing the R-SVM implementation,
+│           dynamic safe screening method, experiments,
+│           statistical analyses, and visualization.
+│
+├── requirements.txt
+│   └── Python dependencies required to run the notebook.
+│
+├── data/
+│   └── Dataset-related files used by the experiments,
+│       when applicable.
+│
+├── results/
+│   ├── master_results.csv
+│   │   └── Complete experimental results across datasets,
+│   │       solvers, parameters, methods, and random seeds.
+│   │
+│   ├── fastness_results.csv
+│   │   └── Aggregated computational-efficiency results.
+│   │
+│   ├── objective_accuracy_results.csv
+│   │   └── Objective-value and predictive-performance
+│   │       comparisons between baseline and screened R-SVM.
+│   │
+│   └── objective_accuracy_results_summary.csv
+│       └── Summary of the predictive-equivalence analysis.
+│
+└── figures/
+    ├── performance_analysis.pdf
+    ├── objective_difference.pdf
+    ├── accuracy_difference.pdf
+    ├── auc_difference.pdf
+    └── f1_difference.pdf
+        └── Figures generated from the Version 2.0 results.
 
 ---
 
-## Method
+# 1. Method
 
-This repository implements Robust Support Vector Machine (R-SVM) together with the proposed Dynamic Safe Screening method.
+Version 2.0 implements Robust Support Vector Machine (R-SVM) together
+with the proposed Dynamic Safe Screening method.
 
-The screening procedure identifies training samples whose optimal dual variables can be safely determined to be at their boundary values. These samples can then be excluded from the subsequent optimization problem without changing the optimal solution, up to numerical solver tolerance.
+The screening procedure identifies training samples whose optimal dual
+variables can be safely determined to lie at their boundary values.
+These samples can then be excluded from the subsequent optimization
+problem without changing the optimal solution, subject to the numerical
+accuracy of the optimization solver.
 
-The implementation supports both the baseline R-SVM formulation and the proposed R-SVM with safe screening.
-
----
-
-# Experimental Setup
-
-## Datasets
-
-Three benchmark binary-classification datasets are used:
-
-| Dataset | Samples | Features |
-|:--|--:|--:|
-| svmguide1 | 3,089 | 4 |
-| phishing | 11,055 | 68 |
-| ijcnn1 | 49,990 | 22 |
-
-The datasets are loaded using the procedures implemented in the notebook and are preprocessed before optimization.
-
----
-
-## Data Preprocessing
-
-The input features are standardized using StandardScaler.
-
-For each random seed, the data are divided into:
-
-- Training set: 64%
-- Validation set: 16%
-- Test set: 20%
-
-The validation set is used for model-related procedures implemented in the notebook, while the test set is used for final predictive evaluation.
-
----
-
-## Random Seeds
-
-Each experimental configuration is evaluated over 30 random seeds.
-
-The random seed is explicitly stored in `master_results.csv`, allowing baseline and screened R-SVM results to be paired using the same data split.
-
----
-
-## Optimization Solvers
-
-Two optimization solvers are evaluated:
-
-- SCS
-- CVXOPT
-
-Both solvers are used for the same R-SVM formulation and screening procedure.
-
----
-
-## Initialization Strategies
-
-Two initialization strategies are considered:
-
-- Cold-start: the solver starts without reusing a previous solution.
-- Warm-start: the solver is allowed to reuse a previous solution when applicable.
-
----
-
-## Regularization Parameter
-
-The following values of the regularization parameter are evaluated:
-
-C ∈ {0.01, 0.05, 0.1}
-
----
-
-## Uncertainty Radius
-
-The following uncertainty-radius values are evaluated:
-
-rho ∈ {0.0, 0.05}
-
-The case rho = 0.0 corresponds to the nominal setting, while rho = 0.05 represents the robust setting considered in the experiments.
-
----
-
-## Compared Methods
-
-Each experimental configuration compares:
+The implementation provides two compared methods:
 
 1. R-SVM (Baseline)
 
@@ -169,13 +77,110 @@ Each experimental configuration compares:
 
 2. R-SVM + Safe Screening
 
-   The proposed R-SVM implementation equipped with dynamic safe screening.
+   The R-SVM implementation equipped with the proposed Dynamic Safe
+   Screening procedure.
 
 ---
 
-## Experimental Configurations
+# 2. Experimental Setup
 
-The benchmark considers:
+## 2.1 Datasets
+
+Three benchmark binary-classification datasets are used in Version 2.0:
+
+| Dataset | Samples | Features |
+|:--|--:|--:|
+| svmguide1 | 3,089 | 4 |
+| phishing | 11,055 | 68 |
+| ijcnn1 | 49,990 | 22 |
+
+The datasets are loaded and preprocessed using the procedures implemented
+in the notebook.
+
+---
+
+## 2.2 Data Preprocessing
+
+The input features are standardized using `StandardScaler`.
+
+For each random seed, the data are divided into:
+
+- Training set: 64%
+- Validation set: 16%
+- Test set: 20%
+
+The validation set is used for model-related procedures implemented in
+the notebook, while the test set is used for final predictive evaluation.
+
+---
+
+## 2.3 Random Seeds
+
+Each experimental configuration is evaluated over 30 random seeds.
+
+The random seed is explicitly stored in `master_results.csv`, allowing
+the baseline and screened R-SVM results to be paired using identical
+data splits.
+
+---
+
+## 2.4 Optimization Solvers
+
+Two optimization solvers are evaluated:
+
+- SCS
+- CVXOPT
+
+Both solvers are applied to the same R-SVM formulation and screening
+procedure.
+
+---
+
+## 2.5 Initialization Strategies
+
+Two initialization strategies are considered:
+
+- Cold-start: the solver starts without reusing a previous solution.
+- Warm-start: the solver is allowed to reuse a previous solution when
+  applicable.
+
+---
+
+## 2.6 Regularization Parameter
+
+The following values of the regularization parameter are evaluated:
+
+C ∈ {0.01, 0.05, 0.1}
+
+---
+
+## 2.7 Uncertainty Radius
+
+The following uncertainty-radius values are evaluated:
+
+rho ∈ {0.0, 0.05}
+
+The case rho = 0.0 corresponds to the nominal setting, while rho = 0.05
+represents the robust setting considered in the experiments.
+
+---
+
+## 2.8 Compared Methods
+
+For every experimental configuration, the following methods are compared:
+
+- R-SVM (Baseline)
+- R-SVM + Safe Screening
+
+The baseline method solves the complete optimization problem, whereas
+the screened method applies Dynamic Safe Screening before solving the
+reduced problem.
+
+---
+
+# 3. Experimental Configurations
+
+The Version 2.0 benchmark considers:
 
 - 3 datasets
 - 2 solvers
@@ -185,7 +190,7 @@ The benchmark considers:
 - 2 methods
 - 30 random seeds
 
-Thus, the complete benchmark contains:
+Therefore, the complete benchmark contains:
 
 3 × 2 × 2 × 3 × 2 × 2 × 30 = 4320
 
@@ -193,47 +198,51 @@ individual experimental runs.
 
 ---
 
-## Solver Settings
+# 4. Solver Settings
 
 The optimization experiments use:
 
 - Maximum iterations: 4,000
 - Solver tolerance: 1e-6
 
-The exact solver configuration and optimization model are implemented in:
+The exact optimization model, screening procedure, and solver calls are
+implemented in:
 
-Paper_SS-RSVM_final.ipynb
+code/Paper_SS-RSVM_final.ipynb
 
 ---
 
-# Evaluation Metrics
+# 5. Evaluation Metrics
 
-The experiments evaluate both computational efficiency and predictive performance.
+The experiments evaluate both computational efficiency and predictive
+performance.
 
-## Computational Metrics
+## 5.1 Computational Metrics
 
-The following computational metrics are recorded:
+The following metrics are recorded:
 
 - Training/solve time
 - Safe-screening time
-- Total screened time
+- Total screening time
 - Speedup
 - Screening rate
 - Number of solver iterations
 
 The speedup is defined as:
 
-Speedup = Baseline time / (Screening solve time + Screening overhead time)
+Speedup = Baseline time /
+          (Screening solve time + Screening overhead time)
 
 where:
 
 - Baseline time is the training time of the baseline R-SVM.
 - Screening solve time is the optimization time after safe screening.
-- Screening overhead time is the time required to perform the screening procedure.
+- Screening overhead time is the time required to perform the screening
+  procedure.
 
 ---
 
-## Predictive Metrics
+## 5.2 Predictive Metrics
 
 The following predictive metrics are reported:
 
@@ -242,15 +251,17 @@ The following predictive metrics are reported:
 - AUC
 - F1-score
 
-These metrics are computed for both the baseline and screened R-SVM models.
+These metrics are evaluated for both the baseline and screened R-SVM
+methods.
 
 ---
 
-# Statistical Analysis
+# 6. Statistical Analysis
 
-## Computational Efficiency
+## 6.1 Computational Efficiency
 
-The baseline and screened methods are compared using paired statistical testing across matched random seeds.
+The computational performance of the baseline and screened methods is
+compared using paired statistical testing across matched random seeds.
 
 The pairing is performed using the same:
 
@@ -261,13 +272,15 @@ The pairing is performed using the same:
 - rho
 - Random seed
 
-This ensures that the computational comparison is performed on matched experimental runs.
+This ensures that the computational comparison is based on matched
+experimental runs.
 
 ---
 
-## Predictive Equivalence
+## 6.2 Predictive Equivalence
 
-Predictive equivalence between the baseline and screened methods is evaluated using paired Two One-Sided Tests (TOST).
+Predictive equivalence between the baseline and screened methods is
+evaluated using paired Two One-Sided Tests (TOST).
 
 The analysis considers:
 
@@ -276,7 +289,8 @@ The analysis considers:
 - AUC
 - F1-score
 
-The equivalence margins used in the experiments are defined directly in the notebook.
+The equivalence margins used in Version 2.0 are specified directly in
+the notebook.
 
 The resulting p-values and summary statistics are stored in:
 
@@ -286,11 +300,12 @@ results/objective_accuracy_results_summary.csv
 
 ---
 
-# Provided Results
+# 7. Provided Results
 
-The repository includes the complete experimental results required to reproduce the reported analysis.
+Version 2.0 provides the processed experimental results required to
+reproduce the reported analyses.
 
-## master_results.csv
+## 7.1 master_results.csv
 
 This is the main experimental result file.
 
@@ -315,7 +330,7 @@ It contains results for individual experimental runs, including:
 
 ---
 
-## fastness_results.csv
+## 7.2 fastness_results.csv
 
 This file contains aggregated computational-efficiency results.
 
@@ -332,61 +347,67 @@ It includes:
 
 ---
 
-## objective_accuracy_results.csv
+## 7.3 objective_accuracy_results.csv
 
-This file contains paired comparisons between baseline R-SVM and screened R-SVM for:
+This file contains paired comparisons between baseline R-SVM and
+screened R-SVM for:
 
 - Objective value
 - Accuracy
 - AUC
 - F1-score
 
-The file also contains the corresponding statistical equivalence-test results.
+The file also contains the corresponding statistical equivalence-test
+results.
 
 ---
 
-## objective_accuracy_results_summary.csv
+## 7.4 objective_accuracy_results_summary.csv
 
-This file contains a compact summary of the predictive-equivalence analysis, including the proportion of experimental configurations satisfying the specified equivalence criteria.
+This file provides a compact summary of the predictive-equivalence
+analysis, including the proportion of experimental configurations that
+satisfy the specified equivalence criteria.
 
 ---
 
-# Figures
+# 8. Figures
 
-The `figures/` directory contains the figures generated from the provided experimental results.
+The `figures/` directory contains the figures generated from the
+Version 2.0 experimental results.
 
-### performance_analysis.pdf
+## performance_analysis.pdf
 
-Comparison of computational performance and safe-screening rates across the experimental configurations.
+Comparison of computational performance and safe-screening rates across
+the experimental configurations.
 
-### objective_difference.pdf
+## objective_difference.pdf
 
-Differences in objective values between baseline R-SVM and screened R-SVM.
+Differences in objective values between baseline R-SVM and screened
+R-SVM.
 
-### accuracy_difference.pdf
+## accuracy_difference.pdf
 
 Differences in predictive accuracy between the two methods.
 
-### auc_difference.pdf
+## auc_difference.pdf
 
 Differences in AUC between the two methods.
 
-### f1_difference.pdf
+## f1_difference.pdf
 
 Differences in F1-score between the two methods.
 
 ---
 
-# Reproducing the Reported Analysis
+# 9. Reproducing the Version 2.0 Analysis
 
-The repository provides the processed CSV results, so the full optimization benchmark does not need to be rerun to reproduce the reported analysis.
+The Version 2.0 directory provides the processed CSV result files.
+Therefore, the complete optimization benchmark does not need to be
+rerun to reproduce the reported analyses and figures.
 
-## Step 1: Clone the repository
+## Step 1: Install dependencies
 
-    git clone https://github.com/NguynHau/Paper_SS-RSVM.git
-    cd Paper_SS-RSVM
-
-## Step 2: Install dependencies
+From the Version 2.0 directory, install the required Python packages:
 
     pip install -r requirements.txt
 
@@ -404,32 +425,46 @@ The main dependencies include:
 
 ---
 
-## Step 3: Open the notebook
+## Step 2: Open the notebook
 
 Open:
 
-Paper_SS-RSVM_final.ipynb
+    code/Paper_SS-RSVM_final.ipynb
 
-The notebook contains the implementation, result-processing procedures, statistical analyses, and visualization code.
+The notebook contains:
 
----
-
-## Step 4: Reproduce the analysis from the provided results
-
-The following files are already included:
-
-- results/master_results.csv
-- results/fastness_results.csv
-- results/objective_accuracy_results.csv
-- results/objective_accuracy_results_summary.csv
-
-Therefore, users can reproduce the reported tables, statistical analyses, and figures using the supplied results without rerunning the complete optimization benchmark.
+- R-SVM implementation
+- Dynamic Safe Screening implementation
+- Experimental procedures
+- Result-processing procedures
+- Statistical analyses
+- Visualization code
 
 ---
 
-# Re-running the Full Benchmark
+## Step 3: Use the provided results
 
-Users who want to independently reproduce the raw experimental results can rerun the complete experimental pipeline in the notebook.
+The following files are already provided:
+
+    results/master_results.csv
+    results/fastness_results.csv
+    results/objective_accuracy_results.csv
+    results/objective_accuracy_results_summary.csv
+
+These files contain the experimental results used for the reported
+analyses.
+
+Consequently, users can reproduce the statistical analyses and figures
+without rerunning all optimization experiments.
+
+---
+
+# 10. Re-running the Full Benchmark
+
+Users who want to independently reproduce the raw experimental results
+can rerun the complete experimental pipeline implemented in:
+
+    code/Paper_SS-RSVM_final.ipynb
 
 The full pipeline performs:
 
@@ -437,7 +472,7 @@ The full pipeline performs:
 2. Data preprocessing.
 3. Train/validation/test splitting.
 4. R-SVM optimization.
-5. Dynamic safe screening.
+5. Dynamic Safe Screening.
 6. Baseline R-SVM training.
 7. Screened R-SVM training.
 8. Predictive evaluation.
@@ -446,19 +481,21 @@ The full pipeline performs:
 11. Result aggregation.
 12. Figure generation.
 
-The full benchmark is substantially more computationally expensive than reproducing the analysis from the supplied CSV files.
+The full benchmark is substantially more computationally expensive than
+reproducing the analysis from the supplied CSV files.
 
-The provided `master_results.csv` therefore serves as the stored experimental record used to generate the reported analysis.
+The provided `master_results.csv` therefore serves as the stored
+experimental record used to generate the Version 2.0 analyses.
 
 ---
 
-# Reproducibility Checklist
+# 11. Reproducibility Checklist
 
-The repository provides:
+Version 2.0 provides:
 
 - [x] Final implementation
 - [x] R-SVM baseline implementation
-- [x] Dynamic safe screening implementation
+- [x] Dynamic Safe Screening implementation
 - [x] Dataset configuration
 - [x] Solver configuration
 - [x] Experimental parameters
@@ -472,44 +509,54 @@ The repository provides:
 
 ---
 
-# Computational Environment
+# 12. Computational Environment
 
-The experiments were conducted using Google Colab with a Python CPU runtime.
+The experiments were conducted using Google Colab with a Python CPU
+runtime.
 
-The experimental environment provided approximately 12.7 GB of available RAM.
+The experimental runtime provided approximately 12.7 GB of available
+RAM.
 
-The experiments were also developed and tested on a system equipped with:
+The experiments were also developed and tested on a system equipped
+with:
 
 - CPU: Intel Core i5-12500H
 - CPU frequency: 2.50 GHz
 - RAM: 8 GB
 
-The exact software dependencies are listed in:
+The required software dependencies are listed in:
 
-requirements.txt
-
----
-
-# Code Availability
-
-The source code and experimental results are publicly available at:
-
-https://github.com/NguynHau/Paper_SS-RSVM
-
-An archived version is also available on Zenodo:
-
-https://doi.org/10.18996767
+    requirements.txt
 
 ---
 
-# Citation
+# 13. Relation to Version 1.0
 
-If you use this implementation or the experimental results, please cite the corresponding paper.
+Version 2.0 is the revised version of the computational study.
+
+The repository keeps Version 1.0 and Version 2.0 separately so that the
+previous implementation and results remain preserved and can be compared
+with the revised study.
+
+Version 1.0 contains the earlier code, results, and associated materials.
+
+Version 2.0 contains the updated implementation, experimental results,
+statistical analyses, and figures corresponding to the revised paper.
+
+This README documents Version 2.0 only.
+
+---
+
+# 14. Citation
+
+If you use the Version 2.0 implementation or experimental results, please
+cite the corresponding paper.
 
 The final bibliographic information will be added after publication.
 
 ---
 
-# License
+# 15. License
 
-This repository is provided for research and reproducibility purposes.
+The Version 2.0 materials are provided for research and reproducibility
+purposes.
