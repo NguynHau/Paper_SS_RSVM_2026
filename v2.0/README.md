@@ -21,18 +21,14 @@ v2.0/
 ├── README.md
 │   └── Documentation and reproduction instructions for Version 2.0.
 │
-├── code/
-│   └── Paper_SS-RSVM_final.ipynb
-│       └── Final notebook containing the R-SVM implementation,
-│           dynamic safe screening method, experiments,
-│           statistical analyses, and visualization.
+├── Paper_SS-RSVM_final.ipynb
+│   └── Final notebook containing the R-SVM implementation,
+│       dynamic safe screening method, experiments,
+│       statistical analyses, and visualization.
 │
 ├── requirements.txt
 │   └── Python dependencies required to run the notebook.
 │
-├── data/
-│   └── Dataset-related files used by the experiments,
-│       when applicable.
 │
 ├── results/
 │   ├── master_results.csv
