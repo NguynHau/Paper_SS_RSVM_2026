@@ -39,12 +39,8 @@ Paper_SS-RSVM/
 │
 ├── v2.0/
 │   │
-│   ├── code/
-│   │   └── Paper_SS-RSVM_final.ipynb
-│   │       └── Final implementation and complete experimental pipeline.
-│   │
-│   ├── data/
-│   │   └── Dataset-related files, when applicable.
+│   ├── Paper_SS-RSVM_final.ipynb
+│   │   └── Final implementation and complete experimental pipeline.
 │   │
 │   ├── results/
 │   │   ├── master_results.csv
